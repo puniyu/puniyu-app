@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:forui/forui.dart';
@@ -6,30 +5,33 @@ import 'package:material_ui/material_ui.dart' show Colors, SelectableText;
 import 'package:puniyu_app/l10n/generated/app_localizations.dart';
 import 'package:puniyu_app/platform.dart';
 
-@RoutePage()
-class ErrorPage extends StatelessWidget {
-  const ErrorPage({super.key, required this.description});
+class ErrorView extends StatelessWidget {
+  const ErrorView({
+    super.key,
+    required this.title,
+    required this.description,
+    this.details,
+    this.onBack,
+  });
 
+  final String title;
   final String description;
+  final String? details;
+  final VoidCallback? onBack;
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    void onBack() {
-      AutoRouter.of(context).pop();
-    }
-
     return isDesktop()
         ? _Desktop(
-            title: l10n.errorTitle,
-            subTitle: l10n.errorDescription,
-            description: description,
+            title: title,
+            subTitle: description,
+            description: details,
             onBack: onBack,
           )
         : _Mobile(
-            title: l10n.errorTitle,
-            subTitle: l10n.errorDescription,
-            description: description,
+            title: title,
+            subTitle: description,
+            description: details,
             onBack: onBack,
           );
   }

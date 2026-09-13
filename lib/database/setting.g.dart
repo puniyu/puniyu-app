@@ -35,6 +35,17 @@ final SettingSchema = CindelCollectionSchema<Setting>(
       indexCaseSensitive: true,
       indexType: CindelIndexType.value,
     ),
+    CindelFieldSchema(
+      name: "localization",
+      dartType: "LocalizationSetting",
+      binaryType: "object",
+      isId: false,
+      isIndexed: false,
+      isIndexUnique: false,
+      isIndexReplace: false,
+      indexCaseSensitive: true,
+      indexType: CindelIndexType.value,
+    ),
   ],
   links: <CindelLinkSchema>[],
   compositeIndexes: <CindelCompositeIndexSchema>[],
@@ -123,6 +134,39 @@ extension SettingCindelQueryModifierAccess on CindelQuery<Setting> {
       ),
     );
   }
+
+  CindelQuery<Setting> sortByLocalization({
+    CindelSortOrder order = CindelSortOrder.ascending,
+  }) {
+    return sortBy("localization", order: order);
+  }
+
+  CindelQuery<Setting> sortByLocalizationDesc() {
+    return sortBy("localization", order: CindelSortOrder.descending);
+  }
+
+  CindelQuery<Setting> thenByLocalization({
+    CindelSortOrder order = CindelSortOrder.ascending,
+  }) {
+    return thenBy("localization", order: order);
+  }
+
+  CindelQuery<Setting> thenByLocalizationDesc() {
+    return thenBy("localization", order: CindelSortOrder.descending);
+  }
+
+  CindelQuery<Setting> distinctByLocalization() {
+    return distinctBy("localization");
+  }
+
+  CindelPropertyQuery<Setting, LocalizationSetting> localizationProperty() {
+    return property<LocalizationSetting>(
+      "localization",
+      decode: (value) => _$LocalizationSettingFromCindelEmbedded(
+        (value as Map).cast<String, Object?>(),
+      ),
+    );
+  }
 }
 
 final class SettingQueryFilter {
@@ -178,6 +222,29 @@ final class SettingQueryFilter {
       filter(
         const SettingAppearanceSettingCindelEmbeddedFilter._(<String>[
           "appearance",
+        ]),
+      ),
+    );
+  }
+
+  CindelQuery<Setting> localizationEqualTo(LocalizationSetting value) {
+    return _query.whereMatches(
+      CindelFilter.field(
+        "localization",
+      ).equalTo(_$LocalizationSettingToCindelEmbedded(value)),
+    );
+  }
+
+  CindelQuery<Setting> localization(
+    CindelFilterPredicate Function(
+      SettingLocalizationSettingCindelEmbeddedFilter q,
+    )
+    filter,
+  ) {
+    return _query.whereMatches(
+      filter(
+        const SettingLocalizationSettingCindelEmbeddedFilter._(<String>[
+          "localization",
         ]),
       ),
     );
@@ -243,9 +310,23 @@ final class SettingAppearanceSettingCindelEmbeddedFilter {
   }
 }
 
+final class SettingLocalizationSettingCindelEmbeddedFilter {
+  const SettingLocalizationSettingCindelEmbeddedFilter._(this._path);
+
+  final List<String> _path;
+
+  CindelFilterPredicate languageEqualTo(LanguageMode value) {
+    return CindelFilter.path(<String>[
+      ..._path,
+      "language",
+    ]).equalTo(value.name);
+  }
+}
+
 Map<String, Object?> _$SettingToCindelDocument(Setting object) {
   return <String, Object?>{
     "appearance": _$AppearanceSettingToCindelEmbedded(object.appearance),
+    "localization": _$LocalizationSettingToCindelEmbedded(object.localization),
   };
 }
 
@@ -255,23 +336,36 @@ Setting _$SettingFromCindelDocument(Map<String, Object?> document) {
   object.appearance = _$AppearanceSettingFromCindelEmbedded(
     (document["appearance"] as Map).cast<String, Object?>(),
   );
+  object.localization = _$LocalizationSettingFromCindelEmbedded(
+    (document["localization"] as Map).cast<String, Object?>(),
+  );
   return object;
 }
 
 CindelBinaryDocumentBytes _$SettingToCindelBinaryDocument(Setting object) {
   return cindelEncodeSchemaBinaryDocument(
-    <Object?>[_$AppearanceSettingToCindelEmbedded(object.appearance)],
-    const <CindelBinaryFieldType>[CindelBinaryFieldType.objectValue],
+    <Object?>[
+      _$AppearanceSettingToCindelEmbedded(object.appearance),
+      _$LocalizationSettingToCindelEmbedded(object.localization),
+    ],
+    const <CindelBinaryFieldType>[
+      CindelBinaryFieldType.objectValue,
+      CindelBinaryFieldType.objectValue,
+    ],
   );
 }
 
 Setting _$SettingFromCindelBinaryDocument(CindelBinaryDocumentBytes bytes) {
-  final reader = CindelSchemaBinaryDocumentReader(bytes, staticSize: 3);
+  final reader = CindelSchemaBinaryDocumentReader(bytes, staticSize: 6);
   final Object? field0 = reader.readObject(0, 0);
+  final Object? field1 = reader.readObject(1, 3);
   final object = Setting();
   object.dbId = autoIncrement;
   object.appearance = _$AppearanceSettingFromCindelEmbedded(
     (field0 as Map).cast<String, Object?>(),
+  );
+  object.localization = _$LocalizationSettingFromCindelEmbedded(
+    (field1 as Map).cast<String, Object?>(),
   );
   return object;
 }
@@ -291,6 +385,17 @@ void _$SettingWriteCindelNativeDocument(
       _$AppearanceSettingToCindelEmbedded,
     );
   }
+  {
+    final value = object.localization;
+    cindelWriteNativeObject<LocalizationSetting>(
+      writer,
+      1,
+      _$LocalizationSettingCindelNativeFieldNames,
+      value,
+      _$LocalizationSettingWriteCindelNativeEmbedded,
+      _$LocalizationSettingToCindelEmbedded,
+    );
+  }
 }
 
 Setting _$SettingReadCindelNativeDocument(
@@ -306,6 +411,14 @@ Setting _$SettingReadCindelNativeDocument(
     _$AppearanceSettingCindelNativeFieldNames,
     _$AppearanceSettingReadCindelNativeEmbedded,
     _$AppearanceSettingFromCindelEmbedded,
+  ))!;
+  object.localization = (cindelReadNativeObject<LocalizationSetting>(
+    reader,
+    documentIndex,
+    1,
+    _$LocalizationSettingCindelNativeFieldNames,
+    _$LocalizationSettingReadCindelNativeEmbedded,
+    _$LocalizationSettingFromCindelEmbedded,
   ))!;
   return object;
 }
@@ -357,6 +470,40 @@ AppearanceSetting _$AppearanceSettingReadCindelNativeEmbedded(
   object.themeId = reader.readString(documentIndex, 0) as String;
   object.themeMode = ThemeMode.values.byName(
     reader.readString(documentIndex, 1) as String,
+  );
+  return object;
+}
+
+const _$LocalizationSettingCindelNativeFieldNames = <String>["language"];
+
+Map<String, Object?> _$LocalizationSettingToCindelEmbedded(
+  LocalizationSetting object,
+) {
+  return <String, Object?>{"language": object.language.name};
+}
+
+LocalizationSetting _$LocalizationSettingFromCindelEmbedded(
+  Map<String, Object?> document,
+) {
+  final object = LocalizationSetting();
+  object.language = LanguageMode.values.byName(document["language"] as String);
+  return object;
+}
+
+void _$LocalizationSettingWriteCindelNativeEmbedded(
+  CindelNativeDocumentWriter writer,
+  LocalizationSetting object,
+) {
+  writer.writeString(0, object.language.name);
+}
+
+LocalizationSetting _$LocalizationSettingReadCindelNativeEmbedded(
+  CindelNativeDocumentReader reader,
+  int documentIndex,
+) {
+  final object = LocalizationSetting();
+  object.language = LanguageMode.values.byName(
+    reader.readString(documentIndex, 0) as String,
   );
   return object;
 }

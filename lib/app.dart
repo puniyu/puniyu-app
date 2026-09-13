@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
 import 'package:material_ui/material_ui.dart' show MaterialApp, Theme;
 import 'package:puniyu_app/l10n/generated/app_localizations.dart';
+import 'package:puniyu_app/localization.dart';
 import 'package:puniyu_app/router.dart';
 import 'package:puniyu_app/theme.dart' hide Theme;
 
@@ -32,10 +33,12 @@ class _AppState extends ConsumerState<App> {
   @override
   Widget build(BuildContext context) {
     final manager = ref.watch(themeControllerProvider);
+    final language = ref.watch(localizationControllerProvider);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: _router.config(),
+      locale: language.locale,
       theme: manager.lightTheme.toApproximateMaterialTheme(),
       darkTheme: manager.darkTheme.toApproximateMaterialTheme(),
       themeMode: manager.themeMode,

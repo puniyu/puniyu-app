@@ -32,38 +32,6 @@
     "@close": {
         "description": "Window close action"
     },
-    "appearance": "Appearance",
-    "@appearance": {
-        "description": "Appearance settings page title"
-    },
-    "themeColor": "Theme Color",
-    "@themeColor": {
-        "description": "Theme color setting title"
-    },
-    "themeColorDesc": "Choose the color scheme for the app",
-    "@themeColorDesc": {
-        "description": "Theme color setting description"
-    },
-    "themeMode": "Theme Mode",
-    "@themeMode": {
-        "description": "Theme mode setting title"
-    },
-    "themeModeDesc": "Choose the display mode for the app",
-    "@themeModeDesc": {
-        "description": "Theme mode setting description"
-    },
-    "themeModeLight": "Light",
-    "@themeModeLight": {
-        "description": "Light mode"
-    },
-    "themeModeDark": "Dark",
-    "@themeModeDark": {
-        "description": "Dark mode"
-    },
-    "themeModeSystem": "System",
-    "@themeModeSystem": {
-        "description": "Follow system theme mode"
-    },
     "back": "Go back",
     "@back": {
         "description": "Generic action to go back to the previous page"
@@ -100,61 +68,60 @@
     "@errorDescription": {
         "description": "Fallback description shown on the error page"
     },
-    "proxy": "Proxy",
-    "@proxy": {
-        "description": "Proxy settings page title"
+    "general": "General",
+    "@general": {
+        "description": "General settings page title"
     },
-    "proxyMode": "Proxy Mode",
-    "@proxyMode": {
-        "description": "Proxy mode setting title"
+    "language": "Language",
+    "@language": {
+        "description": "Language setting title"
     },
-    "proxyModeDesc": "Choose how to connect through a proxy",
-    "@proxyModeDesc": {
-        "description": "Proxy mode setting description"
+    "languageZhLocale": "中文",
+    "@languageZhLocale": {
+        "description": "Chinese language option"
     },
-    "proxyOff": "Off",
-    "@proxyOff": {
-        "description": "Disable proxy"
+    "languageEnLocale": "English",
+    "@languageEnLocale": {
+        "description": "English language option"
     },
-    "proxySystem": "System",
-    "@proxySystem": {
-        "description": "Follow system proxy settings"
+    "languageSystemLocale": "System",
+    "@languageSystemLocale": {
+        "description": "Follow system language option"
     },
-    "proxyCustom": "Custom",
-    "@proxyCustom": {
-        "description": "Custom proxy configuration"
+    "appearance": "Appearance",
+    "@appearance": {
+        "description": "Appearance settings page title"
     },
-    "proxyHost": "Host",
-    "@proxyHost": {
-        "description": "The proxy server address"
+    "themeColor": "Theme Color",
+    "@themeColor": {
+        "description": "Theme color setting title"
     },
-    "proxyHostDesc": "The proxy server address",
-    "@proxyHostDesc": {
-        "description": "The proxy server address description"
+    "themeColorDesc": "Choose the color scheme for the app",
+    "@themeColorDesc": {
+        "description": "Theme color setting description"
     },
-    "proxyPort": "Port",
-    "@proxyPort": {
-        "description": "The proxy server port number"
+    "themeMode": "Theme Mode",
+    "@themeMode": {
+        "description": "Theme mode setting title"
     },
-    "proxyPortDesc": "The proxy server port number",
-    "@proxyPortDesc": {
-        "description": "The proxy server port description"
+    "themeModeDesc": "Choose the display mode for the app",
+    "@themeModeDesc": {
+        "description": "Theme mode setting description"
     },
-    "proxyReadSystem": "Detect System Proxy",
-    "@proxyReadSystem": {
-        "description": "Detect system proxy button"
+    "themeModeLight": "Light",
+    "@themeModeLight": {
+        "description": "Light mode"
     },
-    "proxyDetected": "Detected: {proxy}",
-    "@proxyDetected": {
-        "placeholders": {
-            "proxy": {
-                "type": "String"
-            }
-        },
-        "description": "System proxy detected"
+    "themeModeDark": "Dark",
+    "@themeModeDark": {
+        "description": "Dark mode"
     },
-    "proxyNotDetected": "No system proxy detected",
-    "@proxyNotDetected": {
-        "description": "No system proxy detected"
+    "themeModeSystem": "System",
+    "@themeModeSystem": {
+        "description": "Follow system theme mode"
+    },
+    "about": "About",
+    "@about": {
+        "description": "About settings page title"
     }
 }

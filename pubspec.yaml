@@ -40,6 +40,8 @@ dependencies:
   # 系统代理
   flutter_sys_proxy: ^0.2.0
 
+  # 应用信息
+  package_info_plus: ^10.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -52,7 +54,6 @@ dev_dependencies:
   forui_cli: ^0.26.1
   riverpod_generator: ^4.0.9
   cindel_generator: ^1.0.0
-
 flutter:
   uses-material-design: false
   generate: true

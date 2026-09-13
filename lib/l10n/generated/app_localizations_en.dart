@@ -33,30 +33,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get close => 'Close';
 
   @override
-  String get appearance => 'Appearance';
-
-  @override
-  String get themeColor => 'Theme Color';
-
-  @override
-  String get themeColorDesc => 'Choose the color scheme for the app';
-
-  @override
-  String get themeMode => 'Theme Mode';
-
-  @override
-  String get themeModeDesc => 'Choose the display mode for the app';
-
-  @override
-  String get themeModeLight => 'Light';
-
-  @override
-  String get themeModeDark => 'Dark';
-
-  @override
-  String get themeModeSystem => 'System';
-
-  @override
   String get back => 'Go back';
 
   @override
@@ -81,43 +57,44 @@ class AppLocalizationsEn extends AppLocalizations {
       'An unexpected problem occurred. You can copy the details below to report the issue, or go back.';
 
   @override
-  String get proxy => 'Proxy';
+  String get general => 'General';
 
   @override
-  String get proxyMode => 'Proxy Mode';
+  String get language => 'Language';
 
   @override
-  String get proxyModeDesc => 'Choose how to connect through a proxy';
+  String get languageZhLocale => '中文';
 
   @override
-  String get proxyOff => 'Off';
+  String get languageEnLocale => 'English';
 
   @override
-  String get proxySystem => 'System';
+  String get languageSystemLocale => 'System';
 
   @override
-  String get proxyCustom => 'Custom';
+  String get appearance => 'Appearance';
 
   @override
-  String get proxyHost => 'Host';
+  String get themeColor => 'Theme Color';
 
   @override
-  String get proxyHostDesc => 'The proxy server address';
+  String get themeColorDesc => 'Choose the color scheme for the app';
 
   @override
-  String get proxyPort => 'Port';
+  String get themeMode => 'Theme Mode';
 
   @override
-  String get proxyPortDesc => 'The proxy server port number';
+  String get themeModeDesc => 'Choose the display mode for the app';
 
   @override
-  String get proxyReadSystem => 'Detect System Proxy';
+  String get themeModeLight => 'Light';
 
   @override
-  String proxyDetected(String proxy) {
-    return 'Detected: $proxy';
-  }
+  String get themeModeDark => 'Dark';
 
   @override
-  String get proxyNotDetected => 'No system proxy detected';
+  String get themeModeSystem => 'System';
+
+  @override
+  String get about => 'About';
 }

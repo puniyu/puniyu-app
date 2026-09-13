@@ -32,38 +32,6 @@
     "@close": {
         "description": "窗口关闭操作"
     },
-    "appearance": "外观",
-    "@appearance": {
-        "description": "外观设置页面标题"
-    },
-    "themeColor": "主题颜色",
-    "@themeColor": {
-        "description": "主题颜色设置项标题"
-    },
-    "themeColorDesc": "选择应用的主题配色方案",
-    "@themeColorDesc": {
-        "description": "主题颜色设置项描述"
-    },
-    "themeMode": "主题模式",
-    "@themeMode": {
-        "description": "主题模式设置项标题"
-    },
-    "themeModeDesc": "选择应用的显示模式",
-    "@themeModeDesc": {
-        "description": "主题模式设置项描述"
-    },
-    "themeModeLight": "亮色",
-    "@themeModeLight": {
-        "description": "亮色模式"
-    },
-    "themeModeDark": "暗色",
-    "@themeModeDark": {
-        "description": "暗色模式"
-    },
-    "themeModeSystem": "跟随系统",
-    "@themeModeSystem": {
-        "description": "跟随系统主题模式"
-    },
     "back": "返回",
     "@back": {
         "description": "返回上一页面的通用操作"
@@ -100,61 +68,60 @@
     "@errorDescription": {
         "description": "错误页兜底说明"
     },
-    "proxy": "代理",
-    "@proxy": {
-        "description": "代理设置页面标题"
+    "general": "常规",
+    "@general": {
+        "description": "常规设置页标题"
     },
-    "proxyMode": "代理模式",
-    "@proxyMode": {
-        "description": "代理模式设置项标题"
+    "language": "语言",
+    "@language": {
+        "description": "语言设置项标题"
     },
-    "proxyModeDesc": "选择代理的连接方式",
-    "@proxyModeDesc": {
-        "description": "代理模式设置项描述"
+    "languageZhLocale": "中文",
+    "@languageZhLocale": {
+        "description": "中文语言选项"
     },
-    "proxyOff": "关闭",
-    "@proxyOff": {
-        "description": "关闭代理"
+    "languageEnLocale": "English",
+    "@languageEnLocale": {
+        "description": "英文语言选项"
     },
-    "proxySystem": "系统代理",
-    "@proxySystem": {
-        "description": "跟随系统代理"
+    "languageSystemLocale": "跟随系统",
+    "@languageSystemLocale": {
+        "description": "跟随系统语言选项"
     },
-    "proxyCustom": "自定义",
-    "@proxyCustom": {
-        "description": "自定义代理配置"
+    "appearance": "外观",
+    "@appearance": {
+        "description": "外观设置页面标题"
     },
-    "proxyHost": "主机地址",
-    "@proxyHost": {
-        "description": "代理服务器的地址"
+    "themeColor": "主题颜色",
+    "@themeColor": {
+        "description": "主题颜色设置项标题"
     },
-    "proxyHostDesc": "代理服务器的地址",
-    "@proxyHostDesc": {
-        "description": "代理服务器的地址描述"
+    "themeColorDesc": "选择应用的主题配色方案",
+    "@themeColorDesc": {
+        "description": "主题颜色设置项描述"
     },
-    "proxyPort": "端口",
-    "@proxyPort": {
-        "description": "代理服务器的端口号"
+    "themeMode": "主题模式",
+    "@themeMode": {
+        "description": "主题模式设置项标题"
     },
-    "proxyPortDesc": "代理服务器的端口号",
-    "@proxyPortDesc": {
-        "description": "代理服务器端口描述"
+    "themeModeDesc": "选择应用的显示模式",
+    "@themeModeDesc": {
+        "description": "主题模式设置项描述"
     },
-    "proxyReadSystem": "检测系统代理",
-    "@proxyReadSystem": {
-        "description": "检测系统代理按钮"
+    "themeModeLight": "亮色",
+    "@themeModeLight": {
+        "description": "亮色模式"
     },
-    "proxyDetected": "已检测到: {proxy}",
-    "@proxyDetected": {
-        "placeholders": {
-            "proxy": {
-                "type": "String"
-            }
-        },
-        "description": "已检测到系统代理"
+    "themeModeDark": "暗色",
+    "@themeModeDark": {
+        "description": "暗色模式"
     },
-    "proxyNotDetected": "未检测到系统代理",
-    "@proxyNotDetected": {
-        "description": "未检测到系统代理"
+    "themeModeSystem": "跟随系统",
+    "@themeModeSystem": {
+        "description": "跟随系统主题模式"
+    },
+    "about": "关于",
+    "@about": {
+        "description": "关于设置页标题"
     }
 }

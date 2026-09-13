@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
 import 'package:material_ui/material_ui.dart' hide Theme;
 import 'package:puniyu_app/l10n/generated/app_localizations.dart';
+import 'package:puniyu_app/platform.dart';
 import 'package:puniyu_app/theme.dart';
-import 'package:puniyu_app/view/widget/setting.dart';
 
 class AppearanceSetting extends ConsumerWidget {
   const AppearanceSetting({super.key});
@@ -13,76 +13,118 @@ class AppearanceSetting extends ConsumerWidget {
     final manager = ref.watch(themeControllerProvider);
     final controller = ref.read(themeControllerProvider.notifier);
     final l10n = AppLocalizations.of(context);
+
     final themeModeItems = [
-      _ThemeModeItem(
-        icon: FLucideIcons.sun,
-        label: l10n.themeModeLight,
-        isSelected: manager.themeMode == ThemeMode.light,
-        onTap: () => controller.setThemeMode(ThemeMode.light),
-      ),
-      _ThemeModeItem(
-        icon: FLucideIcons.moon,
-        label: l10n.themeModeDark,
-        isSelected: manager.themeMode == ThemeMode.dark,
-        onTap: () => controller.setThemeMode(ThemeMode.dark),
-      ),
-      _ThemeModeItem(
-        icon: FLucideIcons.monitor,
-        label: l10n.themeModeSystem,
-        isSelected: manager.themeMode == ThemeMode.system,
-        onTap: () => controller.setThemeMode(ThemeMode.system),
-      ),
+      (mode: ThemeMode.light, icon: FLucideIcons.sun, label: l10n.themeModeLight),
+      (mode: ThemeMode.dark, icon: FLucideIcons.moon, label: l10n.themeModeDark),
+      (mode: ThemeMode.system, icon: FLucideIcons.monitor, label: l10n.themeModeSystem),
     ];
 
-    return SettingGroup(
-      title: l10n.appearance,
-      items: [
-        SettingItem(
-          title: l10n.themeColor,
-          subTitle: l10n.themeColorDesc,
-          content: Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: [
-              for (final theme in manager.themes)
-                _ThemeColorItem(
-                  color: theme.light.primary,
-                  label: theme.name,
-                  isSelected: manager.current == theme,
-                  onTap: () => controller.setTheme(theme.id),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(l10n.appearance, style: context.theme.typography.display.lg),
+        const SizedBox(height: 12),
+        FCard(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildSection(
+                  context,
+                  l10n.themeColor,
+                  l10n.themeColorDesc,
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: [
+                      for (final theme in manager.themes)
+                        _ThemeColorItem(
+                          color: theme.light.primary,
+                          label: theme.name,
+                          isSelected: manager.current == theme,
+                          onTap: () => controller.setTheme(theme.id),
+                        ),
+                    ],
+                  ),
                 ),
-            ],
-          ),
-        ),
-        SettingItem(
-          title: l10n.themeMode,
-          subTitle: l10n.themeModeDesc,
-          content: LayoutBuilder(
-            builder: (context, constraints) {
-              final cols = constraints.maxWidth > 400
-                  ? themeModeItems.length
-                  : 2;
-              final w = (constraints.maxWidth - 8 * (cols - 1)) / cols;
-              return Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  for (final (i, item) in themeModeItems.indexed)
-                    SizedBox(
-                      width:
-                          cols == 2 &&
-                              themeModeItems.length.isOdd &&
-                              i == themeModeItems.length - 1
-                          ? constraints.maxWidth
-                          : w,
-                      child: item,
-                    ),
-                ],
-              );
-            },
+                const SizedBox(height: 16),
+                Container(height: 1, color: context.theme.colors.border),
+                const SizedBox(height: 16),
+                _buildSection(
+                  context,
+                  l10n.themeMode,
+                  l10n.themeModeDesc,
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final cols = constraints.maxWidth > 400 ? themeModeItems.length : 2;
+                      final w = (constraints.maxWidth - 8 * (cols - 1)) / cols;
+                      return Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          for (final (i, item) in themeModeItems.indexed)
+                            SizedBox(
+                              width: cols == 2 && themeModeItems.length.isOdd && i == themeModeItems.length - 1
+                                  ? constraints.maxWidth
+                                  : w,
+                              child: FButton(
+                                onPress: () => controller.setThemeMode(item.mode),
+                                selected: manager.themeMode == item.mode,
+                                semanticsLabel: item.label,
+                                variant: manager.themeMode == item.mode ? FButtonVariant.primary : FButtonVariant.outline,
+                                size: FButtonSizeVariant.lg,
+                                prefix: Icon(item.icon, size: 16),
+                                child: Text(item.label, maxLines: 1, overflow: TextOverflow.ellipsis),
+                              ),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildSection(BuildContext context, String title, String subtitle, Widget content) {
+    final header = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(title, style: context.theme.typography.display.md),
+        const SizedBox(height: 4),
+        Text(
+          subtitle,
+          style: context.theme.typography.body.sm.copyWith(
+            color: context.theme.colors.mutedForeground,
+          ),
+        ),
+      ],
+    );
+
+    if (isDesktop()) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(flex: 2, child: header),
+          const SizedBox(width: 24),
+          Flexible(
+            flex: 3,
+            child: Align(alignment: Alignment.centerRight, child: content),
+          ),
+        ],
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [header, const SizedBox(height: 16), content],
     );
   }
 }
@@ -140,33 +182,6 @@ class _ThemeColorItem extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _ThemeModeItem extends StatelessWidget {
-  const _ThemeModeItem({
-    required this.icon,
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return FButton(
-      onPress: onTap,
-      selected: isSelected,
-      semanticsLabel: label,
-      variant: isSelected ? FButtonVariant.primary : FButtonVariant.outline,
-      size: FButtonSizeVariant.lg,
-      prefix: Icon(icon, size: 16),
-      child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
     );
   }
 }
