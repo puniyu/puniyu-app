@@ -21,11 +21,11 @@ class AboutSetting extends StatelessWidget {
             child: FutureBuilder<PackageInfo>(
               future: PackageInfo.fromPlatform(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) {
+                final info = snapshot.data;
+                if (info == null) {
                   return const SizedBox.shrink();
                 }
 
-                final info = snapshot.data!;
                 final version = info.version;
 
                 return Row(

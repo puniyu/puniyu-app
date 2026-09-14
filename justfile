@@ -4,6 +4,7 @@ set shell := ["bash", "-cu"]
 set-app-name:
     dart run change_app_package_name:main "com.puniyu.app"
     dart run rename_app:main all="puniyu"
+    dart run flutter_native_splash:create
 
 set-app-icon:
     dart run flutter_launcher_icons
