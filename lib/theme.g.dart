@@ -13,7 +13,7 @@ part of 'theme.dart';
 final themeControllerProvider = ThemeControllerProvider._();
 
 final class ThemeControllerProvider
-    extends $NotifierProvider<ThemeController, ThemeManager> {
+    extends $AsyncNotifierProvider<ThemeController, ThemeManager> {
   ThemeControllerProvider._()
     : super(
         from: null,
@@ -31,29 +31,21 @@ final class ThemeControllerProvider
   @$internal
   @override
   ThemeController create() => ThemeController();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(ThemeManager value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<ThemeManager>(value),
-    );
-  }
 }
 
-String _$themeControllerHash() => r'eb674a67696bc2b0446994389d4702b94ed178ec';
+String _$themeControllerHash() => r'dc63af8d67e204997c22bcaf22f6539e7cc044fa';
 
-abstract class _$ThemeController extends $Notifier<ThemeManager> {
-  ThemeManager build();
+abstract class _$ThemeController extends $AsyncNotifier<ThemeManager> {
+  FutureOr<ThemeManager> build();
   @$mustCallSuper
   @override
   WhenComplete runBuild() {
-    final ref = this.ref as $Ref<ThemeManager, ThemeManager>;
+    final ref = this.ref as $Ref<AsyncValue<ThemeManager>, ThemeManager>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<ThemeManager, ThemeManager>,
-              ThemeManager,
+              AnyNotifier<AsyncValue<ThemeManager>, ThemeManager>,
+              AsyncValue<ThemeManager>,
               Object?,
               Object?
             >;

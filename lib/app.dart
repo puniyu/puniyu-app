@@ -32,32 +32,40 @@ class _AppState extends ConsumerState<App> {
 
   @override
   Widget build(BuildContext context) {
-    final manager = ref.watch(themeControllerProvider);
-    final language = ref.watch(localizationControllerProvider);
+    final managerAsync = ref.watch(themeControllerProvider);
+    final languageAsync = ref.watch(localizationControllerProvider);
 
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      routerConfig: _router.config(),
-      locale: language.locale,
-      theme: manager.lightTheme.toApproximateMaterialTheme(),
-      darkTheme: manager.darkTheme.toApproximateMaterialTheme(),
-      themeMode: manager.themeMode,
-      builder: (context, child) {
-        final brightness = Theme.of(context).brightness;
-        final theme = brightness == Brightness.dark
-            ? manager.darkTheme
-            : manager.lightTheme;
+    return managerAsync.when(
+      data: (manager) => languageAsync.when(
+        data: (language) => MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          routerConfig: _router.config(),
+          locale: language.locale,
+          theme: manager.lightTheme.toApproximateMaterialTheme(),
+          darkTheme: manager.darkTheme.toApproximateMaterialTheme(),
+          themeMode: manager.themeMode,
+          builder: (context, child) {
+            final brightness = Theme.of(context).brightness;
+            final theme = brightness == Brightness.dark
+                ? manager.darkTheme
+                : manager.lightTheme;
 
-        return FTheme(data: theme, child: child ?? const SizedBox.shrink());
-      },
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        ...FLocalizations.localizationsDelegates,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
+            return FTheme(data: theme, child: child ?? const SizedBox.shrink());
+          },
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            ...FLocalizations.localizationsDelegates,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
+        loading: () => const SizedBox.shrink(),
+        error: (_, _) => const SizedBox.shrink(),
+      ),
+      loading: () => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
     );
   }
 }

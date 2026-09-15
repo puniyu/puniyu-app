@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:cindel/cindel.dart';
 import 'package:puniyu_app/database.dart';
 import 'package:puniyu_app/database/setting.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -13,43 +12,36 @@ enum LanguageMode {
   en;
 
   Locale? get locale => switch (this) {
-        system => null,
-        zh => const Locale('zh'),
-        en => const Locale('en'),
-      };
+    system => null,
+    zh => const Locale('zh'),
+    en => const Locale('en'),
+  };
 }
 
 @Riverpod(keepAlive: true)
 class LocalizationController extends _$LocalizationController {
   @override
-  LanguageMode build() {
-    _load();
-    return LanguageMode.system;
-  }
+  Future<LanguageMode> build() async {
+    final db = await ref.watch(dataBaseProvider.future);
+    final s = await db.setting.all().findFirst() ?? Setting();
 
-  Future<CindelDatabase> _getDb() => ref.read(dataBaseProvider.future);
+    ref.listen(localizationControllerProvider, (previous, next) async {
+      if (previous?.hasValue == true && next.hasValue) {
+        final mode = next.requireValue;
+        final db = await ref.read(dataBaseProvider.future);
+        final s = await db.setting.all().findFirst() ?? Setting();
+        s.localization.language = mode;
+        await db.setting.put(s);
+      }
+    });
 
-  Future<void> _load() async {
-    final db = await _getDb();
-    final s = await db.setting.all().findFirst();
-    if (s == null) return;
-    state = s.localization.language;
+    return s.localization.language;
   }
 
   bool setLanguage(LanguageMode mode) {
-    if (state == mode) return false;
-    state = mode;
-    _persist();
+    final current = state.value;
+    if (current == mode) return false;
+    state = AsyncData(mode);
     return true;
-  }
-
-  Future<void> _persist() async {
-    final db = await _getDb();
-    final s = await db.setting.all().findFirst() ??
-        (Setting()
-          ..appearance = AppearanceSetting()
-          ..localization = LocalizationSetting());
-    s.localization.language = state;
-    await db.setting.put(s);
   }
 }

@@ -10,13 +10,13 @@ import 'package:puniyu_app/window.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   final proxy = await getSystemProxy();
-  if (proxy != null &&
-      proxy.enabled &&
-      proxy.host != null &&
-      proxy.host!.isNotEmpty &&
-      proxy.port != null &&
-      proxy.port! > 0) {
+  if (proxy case SystemProxy(
+    enabled: true,
+    host: final host?,
+    port: final port?,
+  ) when host.isNotEmpty && port > 0) {
     HttpOverrides.global = ProxyHttpOverrides(proxy);
   }
 

@@ -13,7 +13,7 @@ part of 'localization.dart';
 final localizationControllerProvider = LocalizationControllerProvider._();
 
 final class LocalizationControllerProvider
-    extends $NotifierProvider<LocalizationController, LanguageMode> {
+    extends $AsyncNotifierProvider<LocalizationController, LanguageMode> {
   LocalizationControllerProvider._()
     : super(
         from: null,
@@ -31,30 +31,22 @@ final class LocalizationControllerProvider
   @$internal
   @override
   LocalizationController create() => LocalizationController();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(LanguageMode value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<LanguageMode>(value),
-    );
-  }
 }
 
 String _$localizationControllerHash() =>
-    r'0878b65fb53ef3e13409966c229518db5b80e0d2';
+    r'ed0bb9eb2cd7f72026e50c2dcb5e9a8448444e1a';
 
-abstract class _$LocalizationController extends $Notifier<LanguageMode> {
-  LanguageMode build();
+abstract class _$LocalizationController extends $AsyncNotifier<LanguageMode> {
+  FutureOr<LanguageMode> build();
   @$mustCallSuper
   @override
   WhenComplete runBuild() {
-    final ref = this.ref as $Ref<LanguageMode, LanguageMode>;
+    final ref = this.ref as $Ref<AsyncValue<LanguageMode>, LanguageMode>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<LanguageMode, LanguageMode>,
-              LanguageMode,
+              AnyNotifier<AsyncValue<LanguageMode>, LanguageMode>,
+              AsyncValue<LanguageMode>,
               Object?,
               Object?
             >;

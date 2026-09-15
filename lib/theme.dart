@@ -1,4 +1,3 @@
-import 'package:cindel/cindel.dart';
 import 'package:forui/forui.dart';
 import 'package:material_ui/material_ui.dart' hide Theme;
 import 'package:puniyu_app/database.dart';
@@ -39,78 +38,80 @@ class ThemeManager {
   final ThemeMode themeMode;
   final Theme current;
 
-  late final FThemeData lightTheme = _buildThemeData(current.light);
-  late final FThemeData darkTheme = _buildThemeData(current.dark);
-
-  static FThemeData _buildThemeData(FColors colors) {
+  late final FThemeData lightTheme = () {
     final typeface = FTypeface.inherit(
-      colors: colors,
+      colors: current.light,
       touch: false,
       fontFamily: 'DouyinSans',
     );
     return FThemeData(
-      colors: colors,
+      colors: current.light,
       touch: false,
       typography: FTypography(display: typeface, body: typeface),
     );
-  }
+  }();
+
+  late final FThemeData darkTheme = () {
+    final typeface = FTypeface.inherit(
+      colors: current.dark,
+      touch: false,
+      fontFamily: 'DouyinSans',
+    );
+    return FThemeData(
+      colors: current.dark,
+      touch: false,
+      typography: FTypography(display: typeface, body: typeface),
+    );
+  }();
 }
 
 @Riverpod(keepAlive: true)
 class ThemeController extends _$ThemeController {
   @override
-  ThemeManager build() {
+  Future<ThemeManager> build() async {
     final defaultTheme = Pink();
     final themes = [defaultTheme, Blue()];
-    _load();
-    return ThemeManager(themes: themes, currentId: defaultTheme.id);
-  }
+    final db = await ref.watch(dataBaseProvider.future);
+    final s = await db.setting.all().findFirst() ?? Setting();
 
-  Future<CindelDatabase> _getDb() => ref.read(dataBaseProvider.future);
+    ref.listen(themeControllerProvider, (previous, next) async {
+      if (previous?.hasValue == true && next.hasValue) {
+        final manager = next.requireValue;
+        final db = await ref.read(dataBaseProvider.future);
+        final s = await db.setting.all().findFirst() ?? Setting();
+        s.appearance.themeId = manager.currentId;
+        s.appearance.themeMode = manager.themeMode;
+        await db.setting.put(s);
+      }
+    });
 
-  Future<void> _load() async {
-    final db = await _getDb();
-    final s = await db.setting.all().findFirst();
-    if (s == null) return;
-    state = ThemeManager(
-      themes: state.themes,
+    return ThemeManager(
+      themes: themes,
       currentId: s.appearance.themeId,
       themeMode: s.appearance.themeMode,
     );
   }
 
   bool setTheme(String id) {
-    final s = state;
-    if (s.currentId == id) return false;
+    final s = state.value;
+    if (s == null || s.currentId == id) return false;
     if (!s.themes.any((t) => t.id == id)) return false;
-    state = ThemeManager(
+    state = AsyncData(ThemeManager(
       themes: s.themes,
       currentId: id,
       themeMode: s.themeMode,
-    );
-    _persist();
+    ));
     return true;
   }
 
   bool setThemeMode(ThemeMode mode) {
-    final s = state;
-    if (s.themeMode == mode) return false;
-    state = ThemeManager(
+    final s = state.value;
+    if (s == null || s.themeMode == mode) return false;
+    state = AsyncData(ThemeManager(
       themes: s.themes,
       currentId: s.currentId,
       themeMode: mode,
-    );
-    _persist();
+    ));
     return true;
-  }
-
-  Future<void> _persist() async {
-    final db = await _getDb();
-    final s =
-        await db.setting.all().findFirst() ??
-        (Setting()..appearance = AppearanceSetting());
-    s.appearance.themeId = state.currentId;
-    s.appearance.themeMode = state.themeMode;
-    await db.setting.put(s);
   }
 }

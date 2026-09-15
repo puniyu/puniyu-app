@@ -33,7 +33,7 @@ class _LanguageView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final language = ref.watch(localizationControllerProvider);
+    final language = ref.watch(localizationControllerProvider).requireValue;
     final controller = ref.read(localizationControllerProvider.notifier);
     final l10n = AppLocalizations.of(context);
 

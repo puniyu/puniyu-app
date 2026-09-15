@@ -15,6 +15,7 @@ class DataBase extends _$DataBase {
       schemas: [SettingSchema],
     );
     ref.onDispose(db.close);
+
     return db;
   }
 }
