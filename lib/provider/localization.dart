@@ -1,22 +1,9 @@
-import 'dart:ui';
-
 import 'package:puniyu_app/database.dart';
 import 'package:puniyu_app/database/setting.dart';
+import 'package:puniyu_app/model/language_mode.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'localization.g.dart';
-
-enum LanguageMode {
-  system,
-  zh,
-  en;
-
-  Locale? get locale => switch (this) {
-    system => null,
-    zh => const Locale('zh'),
-    en => const Locale('en'),
-  };
-}
 
 @Riverpod(keepAlive: true)
 class LocalizationController extends _$LocalizationController {

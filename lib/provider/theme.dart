@@ -1,69 +1,12 @@
-import 'package:forui/forui.dart';
 import 'package:material_ui/material_ui.dart' hide Theme;
 import 'package:puniyu_app/database.dart';
 import 'package:puniyu_app/database/setting.dart';
+import 'package:puniyu_app/model/theme_manager.dart';
 import 'package:puniyu_app/theme/blue.dart';
 import 'package:puniyu_app/theme/pink.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'theme.g.dart';
-
-abstract class Theme {
-  String get id => name;
-  String get name;
-  FColors get light;
-  FColors get dark;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) || other is Theme && id == other.id;
-
-  @override
-  int get hashCode => id.hashCode;
-
-  @override
-  String toString() => name;
-}
-
-class ThemeManager {
-  ThemeManager({
-    required List<Theme> themes,
-    required this.currentId,
-    this.themeMode = ThemeMode.system,
-  }) : themes = List.unmodifiable(themes),
-       current = themes.firstWhere((theme) => theme.id == currentId);
-
-  final List<Theme> themes;
-  final String currentId;
-  final ThemeMode themeMode;
-  final Theme current;
-
-  late final FThemeData lightTheme = () {
-    final typeface = FTypeface.inherit(
-      colors: current.light,
-      touch: false,
-      fontFamily: 'DouyinSans',
-    );
-    return FThemeData(
-      colors: current.light,
-      touch: false,
-      typography: FTypography(display: typeface, body: typeface),
-    );
-  }();
-
-  late final FThemeData darkTheme = () {
-    final typeface = FTypeface.inherit(
-      colors: current.dark,
-      touch: false,
-      fontFamily: 'DouyinSans',
-    );
-    return FThemeData(
-      colors: current.dark,
-      touch: false,
-      typography: FTypography(display: typeface, body: typeface),
-    );
-  }();
-}
 
 @Riverpod(keepAlive: true)
 class ThemeController extends _$ThemeController {

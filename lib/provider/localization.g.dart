@@ -34,7 +34,7 @@ final class LocalizationControllerProvider
 }
 
 String _$localizationControllerHash() =>
-    r'ed0bb9eb2cd7f72026e50c2dcb5e9a8448444e1a';
+    r'375f5701e07186c0bcfbde6864c68138b32513a0';
 
 abstract class _$LocalizationController extends $AsyncNotifier<LanguageMode> {
   FutureOr<LanguageMode> build();

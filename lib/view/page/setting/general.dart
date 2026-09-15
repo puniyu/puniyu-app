@@ -2,8 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
 import 'package:puniyu_app/l10n/generated/app_localizations.dart';
-import 'package:puniyu_app/localization.dart';
+import 'package:puniyu_app/model/language_mode.dart';
 import 'package:puniyu_app/platform.dart';
+import 'package:puniyu_app/provider/localization.dart';
 
 class GeneralSetting extends StatelessWidget {
   const GeneralSetting({super.key});

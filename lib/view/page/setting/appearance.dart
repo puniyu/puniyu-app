@@ -3,7 +3,7 @@ import 'package:forui/forui.dart';
 import 'package:material_ui/material_ui.dart' hide Theme;
 import 'package:puniyu_app/l10n/generated/app_localizations.dart';
 import 'package:puniyu_app/platform.dart';
-import 'package:puniyu_app/theme.dart';
+import 'package:puniyu_app/provider/theme.dart';
 
 class AppearanceSetting extends ConsumerWidget {
   const AppearanceSetting({super.key});

@@ -33,7 +33,7 @@ final class ThemeControllerProvider
   ThemeController create() => ThemeController();
 }
 
-String _$themeControllerHash() => r'dc63af8d67e204997c22bcaf22f6539e7cc044fa';
+String _$themeControllerHash() => r'dfc1ca241b001a9e8d9b6f3e8e786211bcfe7f68';
 
 abstract class _$ThemeController extends $AsyncNotifier<ThemeManager> {
   FutureOr<ThemeManager> build();
