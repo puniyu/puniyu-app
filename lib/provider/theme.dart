@@ -12,24 +12,23 @@ part 'theme.g.dart';
 class ThemeController extends _$ThemeController {
   @override
   Future<ThemeManager> build() async {
-    final defaultTheme = Pink();
-    final themes = [defaultTheme, Blue()];
     final db = await ref.watch(dataBaseProvider.future);
     final s = await db.setting.all().findFirst() ?? Setting();
 
-    ref.listen(themeControllerProvider, (previous, next) async {
-      if (previous?.hasValue == true && next.hasValue) {
-        final manager = next.requireValue;
-        final db = await ref.read(dataBaseProvider.future);
-        final s = await db.setting.all().findFirst() ?? Setting();
-        s.appearance.themeId = manager.currentId;
-        s.appearance.themeMode = manager.themeMode;
-        await db.setting.put(s);
-      }
+    listenSelf((previous, next) async {
+      if (previous?.hasValue != true || !next.hasValue) return;
+
+      final manager = next.requireValue;
+      final db = await ref.read(dataBaseProvider.future);
+      final setting = await db.setting.all().findFirst() ?? Setting();
+      setting.appearance
+        ..themeId = manager.currentId
+        ..themeMode = manager.themeMode;
+      await db.setting.put(setting);
     });
 
     return ThemeManager(
-      themes: themes,
+      themes: [Pink(), Blue()],
       currentId: s.appearance.themeId,
       themeMode: s.appearance.themeMode,
     );
@@ -39,22 +38,14 @@ class ThemeController extends _$ThemeController {
     final s = state.value;
     if (s == null || s.currentId == id) return false;
     if (!s.themes.any((t) => t.id == id)) return false;
-    state = AsyncData(ThemeManager(
-      themes: s.themes,
-      currentId: id,
-      themeMode: s.themeMode,
-    ));
+    state = AsyncData(s.copyWith(currentId: id));
     return true;
   }
 
   bool setThemeMode(ThemeMode mode) {
     final s = state.value;
     if (s == null || s.themeMode == mode) return false;
-    state = AsyncData(ThemeManager(
-      themes: s.themes,
-      currentId: s.currentId,
-      themeMode: mode,
-    ));
+    state = AsyncData(s.copyWith(themeMode: mode));
     return true;
   }
 }

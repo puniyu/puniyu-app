@@ -15,6 +15,13 @@ class ThemeManager {
   final ThemeMode themeMode;
   final Theme current;
 
+  ThemeManager copyWith({String? currentId, ThemeMode? themeMode}) =>
+      ThemeManager(
+        themes: themes,
+        currentId: currentId ?? this.currentId,
+        themeMode: themeMode ?? this.themeMode,
+      );
+
   late final FThemeData lightTheme = () {
     final typeface = FTypeface.inherit(
       colors: current.light,

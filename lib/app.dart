@@ -17,37 +17,41 @@ class App extends ConsumerWidget {
     final manager = ref.watch(themeControllerProvider);
     final language = ref.watch(localizationControllerProvider);
 
-    return manager.when(
-      data: (manager) => language.when(
-        data: (language) => MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            routerConfig: router.config(),
-            locale: language.locale,
-            theme: manager.lightTheme.toApproximateMaterialTheme(),
-            darkTheme: manager.darkTheme.toApproximateMaterialTheme(),
-            themeMode: manager.themeMode,
-            builder: (context, child) {
-              final brightness = Theme.of(context).brightness;
-              final theme = brightness == Brightness.dark
-                  ? manager.darkTheme
-                  : manager.lightTheme;
+    final error = manager.error ?? language.error;
+    if (error != null) {
+      debugPrint(
+        '应用初始化失败: $error\n${manager.stackTrace ?? language.stackTrace}',
+      );
+      return const SizedBox.shrink();
+    }
 
-              return FTheme(data: theme, child: child ?? const SizedBox.shrink());
-            },
-            localizationsDelegates: [
-              AppLocalizations.delegate,
-              ...FLocalizations.localizationsDelegates,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-          ),
-        loading: () => const SizedBox.shrink(),
-        error: (_, _) => const SizedBox.shrink(),
-      ),
-      loading: () => const SizedBox.shrink(),
-      error: (_, _) => const SizedBox.shrink(),
-    );
+    return switch ((manager, language)) {
+      (AsyncData(value: final manager), AsyncData(value: final language)) =>
+        MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          routerConfig: router.config(),
+          locale: language.locale,
+          theme: manager.lightTheme.toApproximateMaterialTheme(),
+          darkTheme: manager.darkTheme.toApproximateMaterialTheme(),
+          themeMode: manager.themeMode,
+          builder: (context, child) {
+            final brightness = Theme.of(context).brightness;
+            final theme = brightness == Brightness.dark
+                ? manager.darkTheme
+                : manager.lightTheme;
+
+            return FTheme(data: theme, child: child ?? const SizedBox.shrink());
+          },
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            ...FLocalizations.localizationsDelegates,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
+      _ => const SizedBox.shrink(),
+    };
   }
 }

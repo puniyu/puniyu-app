@@ -12,22 +12,21 @@ class LocalizationController extends _$LocalizationController {
     final db = await ref.watch(dataBaseProvider.future);
     final s = await db.setting.all().findFirst() ?? Setting();
 
-    ref.listen(localizationControllerProvider, (previous, next) async {
-      if (previous?.hasValue == true && next.hasValue) {
-        final mode = next.requireValue;
-        final db = await ref.read(dataBaseProvider.future);
-        final s = await db.setting.all().findFirst() ?? Setting();
-        s.localization.language = mode;
-        await db.setting.put(s);
-      }
+    listenSelf((previous, next) async {
+      if (previous?.hasValue != true || !next.hasValue) return;
+
+      final mode = next.requireValue;
+      final db = await ref.read(dataBaseProvider.future);
+      final setting = await db.setting.all().findFirst() ?? Setting();
+      setting.localization.language = mode;
+      await db.setting.put(setting);
     });
 
     return s.localization.language;
   }
 
   bool setLanguage(LanguageMode mode) {
-    final current = state.value;
-    if (current == mode) return false;
+    if (state.value == mode) return false;
     state = AsyncData(mode);
     return true;
   }
