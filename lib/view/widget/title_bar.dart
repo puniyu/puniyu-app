@@ -5,7 +5,26 @@ import 'package:window_manager/window_manager.dart';
 import 'package:puniyu_app/l10n/generated/app_localizations.dart';
 import 'package:puniyu_app/platform.dart';
 
-enum _WindowAction { minimize, maximize, restore, close }
+enum _WindowAction {
+  minimize,
+  maximize,
+  restore,
+  close;
+
+  String label(AppLocalizations l10n) => switch (this) {
+    minimize => l10n.minimize,
+    maximize => l10n.maximize,
+    restore => l10n.restore,
+    close => l10n.close,
+  };
+
+  IconData get icon => switch (this) {
+    minimize => FLucideIcons.minus,
+    maximize => FLucideIcons.maximize2,
+    restore => FLucideIcons.copy,
+    close => FLucideIcons.x,
+  };
+}
 
 class TitleBar extends StatelessWidget {
   const TitleBar({super.key});
@@ -19,16 +38,11 @@ class TitleBar extends StatelessWidget {
   }
 }
 
-class _DeskTop extends StatefulWidget {
+class _DeskTop extends StatelessWidget {
   const _DeskTop({required this.title});
 
   final String title;
 
-  @override
-  State<_DeskTop> createState() => _DeskTopState();
-}
-
-class _DeskTopState extends State<_DeskTop> {
   @override
   Widget build(BuildContext context) {
     final colors = context.theme.colors;
@@ -59,7 +73,7 @@ class _DeskTopState extends State<_DeskTop> {
                       const SizedBox(width: 8),
                       Flexible(
                         child: Text(
-                          widget.title,
+                          title,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: context.theme.typography.body.sm.copyWith(
@@ -89,7 +103,7 @@ class _Window extends StatefulWidget {
 }
 
 class _WindowState extends State<_Window> with WindowListener {
-  _WindowAction _action = _WindowAction.maximize;
+  _WindowAction _action = .maximize;
 
   @override
   void initState() {
@@ -111,47 +125,21 @@ class _WindowState extends State<_Window> with WindowListener {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.theme.colors;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _WindowButton(
-          action: _WindowAction.minimize,
-          hoverBackground: colors.secondary,
-          hoverForeground: colors.foreground.withValues(alpha: 0.72),
-          onAction: () => windowManager.minimize(),
-        ),
-        _WindowButton(
-          action: _action,
-          hoverBackground: colors.secondary,
-          hoverForeground: colors.foreground.withValues(alpha: 0.72),
-          onAction: () => _action == _WindowAction.restore
-              ? windowManager.unmaximize()
-              : windowManager.maximize(),
-        ),
-        _WindowButton(
-          action: _WindowAction.close,
-          hoverBackground: colors.destructive,
-          hoverForeground: colors.destructiveForeground,
-          onAction: () => windowManager.close(),
-        ),
+        _WindowButton(_WindowAction.minimize),
+        _WindowButton(_action),
+        _WindowButton(_WindowAction.close),
       ],
     );
   }
 }
 
 class _WindowButton extends StatefulWidget {
-  const _WindowButton({
-    required this.action,
-    required this.hoverBackground,
-    required this.hoverForeground,
-    required this.onAction,
-  });
+  const _WindowButton(this.action);
 
   final _WindowAction action;
-  final Color hoverBackground;
-  final Color hoverForeground;
-  final VoidCallback onAction;
 
   @override
   State<_WindowButton> createState() => _WindowButtonState();
@@ -160,45 +148,45 @@ class _WindowButton extends StatefulWidget {
 class _WindowButtonState extends State<_WindowButton> {
   bool _isHovered = false;
 
-  IconData get _icon => switch (widget.action) {
-    _WindowAction.minimize => FLucideIcons.minus,
-    _WindowAction.maximize => FLucideIcons.maximize2,
-    _WindowAction.restore => FLucideIcons.copy,
-    _WindowAction.close => FLucideIcons.x,
-  };
-
-  String _label(BuildContext context) => switch (widget.action) {
-    _WindowAction.minimize => AppLocalizations.of(context).minimize,
-    _WindowAction.maximize => AppLocalizations.of(context).maximize,
-    _WindowAction.restore => AppLocalizations.of(context).restore,
-    _WindowAction.close => AppLocalizations.of(context).close,
+  VoidCallback get _onTap => switch (widget.action) {
+    _WindowAction.minimize => windowManager.minimize,
+    _WindowAction.maximize => windowManager.maximize,
+    _WindowAction.restore => windowManager.unmaximize,
+    _WindowAction.close => windowManager.close,
   };
 
   @override
   Widget build(BuildContext context) {
-    final foreground = context.theme.colors.foreground.withValues(alpha: 0.72);
+    final colors = context.theme.colors;
+    final action = widget.action;
+    final label = action.label(AppLocalizations.of(context));
+    final idle = colors.foreground.withValues(alpha: 0.72);
+    final (hoverBackground, hoverForeground) = switch (action) {
+      _WindowAction.close => (colors.destructive, colors.destructiveForeground),
+      _ => (colors.secondary, idle),
+    };
 
     return FTooltip(
-      tipBuilder: (_, _) => Text(_label(context)),
+      tipBuilder: (_, _) => Text(label),
       child: Semantics(
         button: true,
-        label: _label(context),
+        label: label,
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           onEnter: (_) => setState(() => _isHovered = true),
           onExit: (_) => setState(() => _isHovered = false),
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
-            onTap: widget.onAction,
+            onTap: _onTap,
             child: SizedBox(
               width: 46,
               height: 36,
               child: ColoredBox(
-                color: _isHovered ? widget.hoverBackground : Colors.transparent,
+                color: _isHovered ? hoverBackground : Colors.transparent,
                 child: Icon(
-                  _icon,
+                  action.icon,
                   size: 15,
-                  color: _isHovered ? widget.hoverForeground : foreground,
+                  color: _isHovered ? hoverForeground : idle,
                 ),
               ),
             ),
