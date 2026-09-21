@@ -6,13 +6,14 @@ import 'package:puniyu_app/l10n/generated/app_localizations.dart';
 import 'package:puniyu_app/platform.dart';
 import 'package:puniyu_app/router.gr.dart';
 
-class NavItem {
-  const NavItem({required this.route, required this.icon, required this.label});
+enum NavSlot { top, bottom }
 
-  final PageRouteInfo route;
-  final IconData icon;
-  final String label;
-}
+typedef NavItem = ({
+  PageRouteInfo route,
+  IconData icon,
+  String label,
+  NavSlot slot,
+});
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key});
@@ -20,49 +21,36 @@ class NavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final topItems = [
-      NavItem(
+    final items = <NavItem>[
+      (
         route: const DashboardRoute(),
         icon: FLucideIcons.layoutDashboard,
         label: l10n.dashboard,
+        slot: .top,
       ),
-    ];
-    final bottomItems = [
-      NavItem(
+      (
         route: const SettingRoute(),
         icon: FLucideIcons.settings,
         label: l10n.setting,
+        slot: .bottom,
       ),
     ];
-    final currentRoute = context.topRoute.name;
 
-    return isDesktop()
-        ? _Desktop(
-            topItems: topItems,
-            bottomItems: bottomItems,
-            currentRoute: currentRoute,
-          )
-        : _Mobile(
-            items: [...topItems, ...bottomItems],
-            currentRoute: currentRoute,
-          );
+    return isDesktop() ? _Desktop(items: items) : _Mobile(items: items);
   }
 }
 
 class _Desktop extends StatelessWidget {
-  const _Desktop({
-    required this.topItems,
-    required this.bottomItems,
-    required this.currentRoute,
-  });
+  const _Desktop({required this.items});
 
-  final List<NavItem> topItems;
-  final List<NavItem> bottomItems;
-  final String currentRoute;
+  final List<NavItem> items;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.theme.colors;
+    final currentRoute = context.topRoute.name;
+    final topItems = items.where((item) => item.slot == .top).toList();
+    final bottomItems = items.where((item) => item.slot == .bottom).toList();
     final topIndex = topItems.indexWhere(
       (item) => item.route.routeName == currentRoute,
     );
@@ -97,8 +85,6 @@ class _Desktop extends StatelessWidget {
       );
     }
 
-    final selectedTop = topIndex >= 0 ? topIndex * 44.0 : 0.0;
-
     return ColoredBox(
       color: colors.background,
       child: SizedBox(
@@ -108,7 +94,7 @@ class _Desktop extends StatelessWidget {
           child: LayoutBuilder(
             builder: (context, constraints) {
               final target = topIndex >= 0
-                  ? selectedTop
+                  ? topIndex * 44.0
                   : constraints.maxHeight -
                         (bottomItems.length - bottomIndex) * 44.0;
 
@@ -161,17 +147,51 @@ class _Desktop extends StatelessWidget {
 }
 
 class _Mobile extends StatelessWidget {
-  const _Mobile({required this.items, required this.currentRoute});
+  const _Mobile({required this.items});
 
   final List<NavItem> items;
-  final String currentRoute;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.theme.colors;
+    final currentRoute = context.topRoute.name;
     final selectedIndex = items.indexWhere(
       (item) => item.route.routeName == currentRoute,
     );
+
+    Widget buildItem(NavItem item) {
+      final selected = item.route.routeName == currentRoute;
+      final foreground = selected ? colors.primary : colors.mutedForeground;
+
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => AutoRouter.of(context).navigate(item.route),
+        child: Column(
+          children: [
+            const SizedBox(height: 8),
+            SizedBox(
+              width: 48,
+              height: 32,
+              child: Center(
+                child: Icon(item.icon, size: 22, color: foreground),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              item.label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: foreground,
+                fontSize: 10,
+                fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+              ),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      );
+    }
 
     return ColoredBox(
       color: colors.background,
@@ -207,7 +227,7 @@ class _Mobile extends StatelessWidget {
                     child: Row(
                       children: [
                         for (final item in items)
-                          Expanded(child: _buildItem(context, item)),
+                          Expanded(child: buildItem(item)),
                       ],
                     ),
                   ),
@@ -216,39 +236,6 @@ class _Mobile extends StatelessWidget {
             },
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildItem(BuildContext context, NavItem item) {
-    final selected = item.route.routeName == currentRoute;
-    final colors = context.theme.colors;
-    final foreground = selected ? colors.primary : colors.mutedForeground;
-
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () => AutoRouter.of(context).navigate(item.route),
-      child: Column(
-        children: [
-          const SizedBox(height: 8),
-          SizedBox(
-            width: 48,
-            height: 32,
-            child: Center(child: Icon(item.icon, size: 22, color: foreground)),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            item.label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: foreground,
-              fontSize: 10,
-              fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
-            ),
-          ),
-          const SizedBox(height: 8),
-        ],
       ),
     );
   }
