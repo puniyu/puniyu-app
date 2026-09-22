@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
 import 'package:forui/forui.dart';
@@ -193,48 +195,52 @@ class _Mobile extends StatelessWidget {
       );
     }
 
-    return ColoredBox(
-      color: colors.background,
-      child: SafeArea(
-        top: false,
-        minimum: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-        child: Container(
-          height: 70,
-          decoration: BoxDecoration(
-            color: colors.card.withValues(alpha: 0.9),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final itemW = constraints.maxWidth / items.length;
-              return Stack(
-                children: [
-                  AnimatedPositioned(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeOutCubic,
-                    left: selectedIndex * itemW + (itemW - 48) / 2,
-                    top: 8,
-                    width: 48,
-                    height: 32,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: colors.primary.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(14),
-                      ),
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+      child: Container(
+        height: 70,
+        decoration: BoxDecoration(
+          color: colors.card,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.08),
+              blurRadius: 24,
+              offset: const Offset(0, -4),
+            ),
+          ],
+        ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final itemW = constraints.maxWidth / items.length;
+            return Stack(
+              children: [
+                AnimatedPositioned(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeOutCubic,
+                  left: selectedIndex * itemW + (itemW - 48) / 2,
+                  top: 8,
+                  width: 48,
+                  height: 32,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: colors.primary.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(14),
                     ),
                   ),
-                  Positioned.fill(
-                    child: Row(
-                      children: [
-                        for (final item in items)
-                          Expanded(child: buildItem(item)),
-                      ],
-                    ),
+                ),
+                Positioned.fill(
+                  child: Row(
+                    children: [
+                      for (final item in items)
+                        Expanded(child: buildItem(item)),
+                    ],
                   ),
-                ],
-              );
-            },
-          ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

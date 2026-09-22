@@ -59,8 +59,14 @@ class _Mobile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         titleBar,
-        const Expanded(child: AutoRouter()),
-        navBar,
+        Expanded(
+          child: Stack(
+            children: [
+              const AutoRouter(),
+              Align(alignment: Alignment.bottomCenter, child: navBar),
+            ],
+          ),
+        ),
       ],
     );
   }
