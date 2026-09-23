@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'theme.dart';
+part of 'window.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,43 +9,43 @@ part of 'theme.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(ThemeController)
-final themeControllerProvider = ThemeControllerProvider._();
+@ProviderFor(WindowController)
+final windowControllerProvider = WindowControllerProvider._();
 
-final class ThemeControllerProvider
-    extends $AsyncNotifierProvider<ThemeController, ThemeManager> {
-  ThemeControllerProvider._()
+final class WindowControllerProvider
+    extends $AsyncNotifierProvider<WindowController, WindowAction> {
+  WindowControllerProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'themeControllerProvider',
+        name: r'windowControllerProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$themeControllerHash();
+  String debugGetCreateSourceHash() => _$windowControllerHash();
 
   @$internal
   @override
-  ThemeController create() => ThemeController();
+  WindowController create() => WindowController();
 }
 
-String _$themeControllerHash() => r'4e9771afc43a74b364f9a5c77b7b593c41a5a6ae';
+String _$windowControllerHash() => r'af31f27dec168e8da23bfe3a37975234bb8e13f3';
 
-abstract class _$ThemeController extends $AsyncNotifier<ThemeManager> {
-  FutureOr<ThemeManager> build();
+abstract class _$WindowController extends $AsyncNotifier<WindowAction> {
+  FutureOr<WindowAction> build();
   @$mustCallSuper
   @override
   WhenComplete runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<ThemeManager>, ThemeManager>;
+    final ref = this.ref as $Ref<AsyncValue<WindowAction>, WindowAction>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<ThemeManager>, ThemeManager>,
-              AsyncValue<ThemeManager>,
+              AnyNotifier<AsyncValue<WindowAction>, WindowAction>,
+              AsyncValue<WindowAction>,
               Object?,
               Object?
             >;
