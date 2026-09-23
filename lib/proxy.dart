@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_sys_proxy/flutter_sys_proxy.dart';
 
-class ProxyHttpOverrides extends HttpOverrides {
-  ProxyHttpOverrides(this._proxy);
+class Http extends HttpOverrides {
+  Http(this._proxy);
 
   final SystemProxy _proxy;
 

@@ -17,7 +17,7 @@ Future<void> main() async {
     host: final host?,
     port: final port?,
   ) when host.isNotEmpty && port > 0) {
-    HttpOverrides.global = ProxyHttpOverrides(proxy);
+    HttpOverrides.global = Http(proxy);
   }
 
   if (isDesktop()) {
