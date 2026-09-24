@@ -48,15 +48,9 @@ class _Desktop extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.theme.colors;
     final currentRoute = context.topRoute.name;
-    final topItems = items.where((item) => item.slot == .top).toList();
-    final bottomItems = items.where((item) => item.slot == .bottom).toList();
-    final topIndex = topItems.indexWhere(
+    final selectedIndex = items.indexWhere(
       (item) => item.route.routeName == currentRoute,
     );
-    final bottomIndex = bottomItems.indexWhere(
-      (item) => item.route.routeName == currentRoute,
-    );
-    final hasSelection = topIndex >= 0 || bottomIndex >= 0;
 
     Widget buildItem(NavItem item) {
       final selected = item.route.routeName == currentRoute;
@@ -92,14 +86,20 @@ class _Desktop extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
           child: LayoutBuilder(
             builder: (context, constraints) {
-              final target = topIndex >= 0
-                  ? topIndex * 44.0
+              final selectedItem = selectedIndex >= 0 ? items[selectedIndex] : null;
+              final isTop = selectedItem?.slot == NavSlot.top;
+              final positionInSlot = items
+                  .take(selectedIndex + 1)
+                  .where((e) => e.slot == selectedItem?.slot)
+                  .length - 1;
+              final target = isTop
+                  ? positionInSlot * 44.0
                   : constraints.maxHeight -
-                        (bottomItems.length - bottomIndex) * 44.0;
+                      (items.where((e) => e.slot == .bottom).length - positionInSlot) * 44.0;
 
               return Stack(
                 children: [
-                  if (hasSelection)
+                  if (selectedIndex >= 0)
                     AnimatedPositioned(
                       duration: const Duration(milliseconds: 360),
                       curve: Curves.easeInOutCubic,
@@ -129,9 +129,11 @@ class _Desktop extends StatelessWidget {
                   Positioned.fill(
                     child: Column(
                       children: [
-                        for (final item in topItems) buildItem(item),
+                        for (final item in items)
+                          if (item.slot == .top) buildItem(item),
                         const Spacer(),
-                        for (final item in bottomItems) buildItem(item),
+                        for (final item in items)
+                          if (item.slot == .bottom) buildItem(item),
                       ],
                     ),
                   ),
