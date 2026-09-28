@@ -9,43 +9,50 @@ part of 'theme.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(ThemeController)
-final themeControllerProvider = ThemeControllerProvider._();
+@ProviderFor(Theme)
+final themeProvider = ThemeProvider._();
 
-final class ThemeControllerProvider
-    extends $AsyncNotifierProvider<ThemeController, ThemeManager> {
-  ThemeControllerProvider._()
+final class ThemeProvider extends $NotifierProvider<Theme, List<model.Theme>> {
+  ThemeProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'themeControllerProvider',
+        name: r'themeProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$themeControllerHash();
+  String debugGetCreateSourceHash() => _$themeHash();
 
   @$internal
   @override
-  ThemeController create() => ThemeController();
+  Theme create() => Theme();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<model.Theme> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<model.Theme>>(value),
+    );
+  }
 }
 
-String _$themeControllerHash() => r'4e9771afc43a74b364f9a5c77b7b593c41a5a6ae';
+String _$themeHash() => r'afb11413d793272a3e15049d20b7710cd7ced3d1';
 
-abstract class _$ThemeController extends $AsyncNotifier<ThemeManager> {
-  FutureOr<ThemeManager> build();
+abstract class _$Theme extends $Notifier<List<model.Theme>> {
+  List<model.Theme> build();
   @$mustCallSuper
   @override
   WhenComplete runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<ThemeManager>, ThemeManager>;
+    final ref = this.ref as $Ref<List<model.Theme>, List<model.Theme>>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<ThemeManager>, ThemeManager>,
-              AsyncValue<ThemeManager>,
+              AnyNotifier<List<model.Theme>, List<model.Theme>>,
+              List<model.Theme>,
               Object?,
               Object?
             >;

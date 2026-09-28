@@ -3,7 +3,8 @@ import 'package:forui/forui.dart';
 import 'package:material_ui/material_ui.dart' hide Theme;
 import 'package:puniyu_app/l10n/generated/app_localizations.dart';
 import 'package:puniyu_app/platform.dart';
-import 'package:puniyu_app/provider/theme.dart';
+import 'package:puniyu_app/controller/theme.dart';
+import 'package:puniyu_app/provider/theme.dart' show themeProvider;
 
 class AppearanceSetting extends ConsumerWidget {
   const AppearanceSetting({super.key});
@@ -41,11 +42,11 @@ class AppearanceSetting extends ConsumerWidget {
                         spacing: 12,
                         runSpacing: 12,
                         children: [
-                          for (final theme in manager.themes)
+                          for (final theme in ref.watch(themeProvider))
                             _ThemeColorItem(
                               color: theme.light.primary,
-                              label: theme.name,
-                              isSelected: manager.current == theme,
+                              label: theme.id,
+                              isSelected: manager.theme == theme,
                               onTap: () => controller.setTheme(theme.id),
                             ),
                         ],

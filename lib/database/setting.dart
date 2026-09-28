@@ -1,7 +1,6 @@
 import 'package:cindel/cindel.dart';
 import 'package:material_ui/material_ui.dart' hide Theme;
 import 'package:puniyu_app/model/language_mode.dart';
-import 'package:puniyu_app/theme/pink.dart';
 
 part 'setting.g.dart';
 
@@ -16,7 +15,8 @@ class Setting {
 
 @embedded
 class AppearanceSetting {
-  String themeId = Pink().name;
+  // 留空表示用户还没选过，由主题注册表回退到 isDefault 的那个
+  String themeId = "";
   ThemeMode themeMode = ThemeMode.system;
 }
 

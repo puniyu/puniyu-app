@@ -1,6 +1,6 @@
-import 'package:puniyu_app/database.dart';
 import 'package:puniyu_app/database/setting.dart';
 import 'package:puniyu_app/model/language_mode.dart';
+import 'package:puniyu_app/provider/database.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'localization.g.dart';
@@ -25,9 +25,8 @@ class LocalizationController extends _$LocalizationController {
     return s.localization.language;
   }
 
-  bool setLanguage(LanguageMode mode) {
-    if (state.value == mode) return false;
+  void setLanguage(LanguageMode mode) {
+    if (state.value == mode) return;
     state = AsyncData(mode);
-    return true;
   }
 }

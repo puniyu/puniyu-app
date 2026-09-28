@@ -1,7 +1,4 @@
-import 'package:material_ui/material_ui.dart' hide Theme;
-import 'package:puniyu_app/database.dart';
-import 'package:puniyu_app/database/setting.dart';
-import 'package:puniyu_app/model/theme_manager.dart';
+import 'package:puniyu_app/model/theme.dart' as model;
 import 'package:puniyu_app/theme/blue.dart';
 import 'package:puniyu_app/theme/pink.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -9,43 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'theme.g.dart';
 
 @Riverpod(keepAlive: true)
-class ThemeController extends _$ThemeController {
+class Theme extends _$Theme {
   @override
-  Future<ThemeManager> build() async {
-    final db = await ref.watch(dataBaseProvider.future);
-    final s = await db.setting.all().findFirst() ?? Setting();
-
-    listenSelf((previous, next) async {
-      if (previous?.hasValue != true || !next.hasValue) return;
-
-      final manager = next.requireValue;
-      final db = await ref.read(dataBaseProvider.future);
-      final setting = await db.setting.all().findFirst() ?? Setting();
-      setting.appearance
-        ..themeId = manager.currentId
-        ..themeMode = manager.themeMode;
-      await db.setting.put(setting);
-    });
-
-    return ThemeManager(
-      themes: [Pink(), Blue()],
-      currentId: s.appearance.themeId,
-      themeMode: s.appearance.themeMode,
-    );
-  }
-
-  bool setTheme(String id) {
-    final s = state.value;
-    if (s == null || s.currentId == id) return false;
-    if (!s.themes.any((t) => t.id == id)) return false;
-    state = AsyncData(s.copyWith(currentId: id));
-    return true;
-  }
-
-  bool setThemeMode(ThemeMode mode) {
-    final s = state.value;
-    if (s == null || s.themeMode == mode) return false;
-    state = AsyncData(s.copyWith(themeMode: mode));
-    return true;
-  }
+  List<model.Theme> build() => List.unmodifiable([Pink(), Blue()]);
 }

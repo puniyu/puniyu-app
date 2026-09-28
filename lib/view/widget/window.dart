@@ -4,7 +4,7 @@ import 'package:forui/forui.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'package:puniyu_app/l10n/generated/app_localizations.dart';
-import 'package:puniyu_app/provider/window.dart';
+import 'package:puniyu_app/controller/window.dart';
 
 class Window extends ConsumerStatefulWidget {
   const Window({super.key});

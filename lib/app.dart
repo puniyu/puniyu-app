@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
 import 'package:material_ui/material_ui.dart' show MaterialApp, Theme;
 import 'package:puniyu_app/l10n/generated/app_localizations.dart';
-import 'package:puniyu_app/provider/localization.dart';
-import 'package:puniyu_app/provider/router.dart';
-import 'package:puniyu_app/provider/theme.dart';
+import 'package:puniyu_app/controller/localization.dart';
+import 'package:puniyu_app/controller/router.dart';
+import 'package:puniyu_app/controller/theme.dart';
 
 class App extends ConsumerWidget {
   const App({super.key});
@@ -31,14 +31,14 @@ class App extends ConsumerWidget {
           debugShowCheckedModeBanner: false,
           routerConfig: router.config(),
           locale: language.locale,
-          theme: manager.lightTheme.toApproximateMaterialTheme(),
-          darkTheme: manager.darkTheme.toApproximateMaterialTheme(),
+          theme: manager.theme.lightTheme.toApproximateMaterialTheme(),
+          darkTheme: manager.theme.darkTheme.toApproximateMaterialTheme(),
           themeMode: manager.themeMode,
           builder: (context, child) {
             final brightness = Theme.of(context).brightness;
             final theme = brightness == Brightness.dark
-                ? manager.darkTheme
-                : manager.lightTheme;
+                ? manager.theme.darkTheme
+                : manager.theme.lightTheme;
 
             return FTheme(data: theme, child: child ?? const SizedBox.shrink());
           },

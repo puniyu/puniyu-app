@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart' hide Theme;
 import 'package:flutter/services.dart';
 import 'package:forui/forui.dart';
-import 'package:puniyu_app/theme/theme.dart';
+import 'package:puniyu_app/model/theme.dart';
 
 class Blue extends Theme {
   @override
-  String get name => "blue";
+  String get id => "blue";
 
   @override
   FColors get light => FColors(
